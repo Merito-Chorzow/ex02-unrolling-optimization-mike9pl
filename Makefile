@@ -1,5 +1,5 @@
 TOOL=arm-none-eabi
-CFLAGS=-mcpu=cortex-m3 -mthumb -O2 -g -ffreestanding -nostdlib
+CFLAGS=-mcpu=cortex-m3 -mthumb -O0 -g -ffreestanding -nostdlib
 LDFLAGS=-T boards/qemu-mps2/linker.ld -Wl,--gc-sections -nostartfiles
 SRC=$(wildcard src/*.c) $(wildcard asm/*.S) boards/qemu-mps2/startup.S
 OUT=build/firmware.elf

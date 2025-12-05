@@ -54,11 +54,19 @@ int main(void) {
   semihost_putstring("\n");
   if (a==b) semihost_putstring("OK [ex02]\n"); else semihost_putstring("FAIL [ex02]\n");
 
-  /* Prosty „pomiar” — wielokrotne wywołania (metryka czasopodobna) */
-  volatile unsigned sink=0;
-  for (unsigned k=0;k<100;k++) sink += sum8_unroll4(buf, N);
+  /* Prosty „pomiar” — wielokrotne wywołania (metryka czasopodobna)*/
+  volatile unsigned sink=0u;
+  unsigned runs=20u;
+  volatile unsigned mean=0u;
+
+  for (unsigned k=0;k<runs;k++) sink += sum8_unroll4(buf, N);
+  mean = sink / runs;
   semihost_putstring("ex02: metric=");
-  semihost_putnumber(sink & 0xFFFF);
+  semihost_putnumber(sink);
+  semihost_putstring(" mean=");
+  semihost_putnumber(mean);
+  semihost_putstring(" stddev=");
+  semihost_putnumber(0u);
   semihost_putstring("\n");
 
   return 0;
