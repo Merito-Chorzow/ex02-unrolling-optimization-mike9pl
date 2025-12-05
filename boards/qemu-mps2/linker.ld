@@ -10,14 +10,15 @@ MEMORY
 
 /* Top of stack (used by vector table) */
 _estack = ORIGIN(RAM) + LENGTH(RAM);
+PROVIDE(__StackTop = _estack);
 
 SECTIONS
 {
-  /* Vector table in FLASH */
+  /* Vector table in FLASH — KEEP to prevent gc-sections from discarding it */
   .isr_vector :
   {
     . = ALIGN(4);
-    *(.isr_vector)
+    KEEP(*(.isr_vector))          /* <--- important */
     . = ALIGN(4);
   } > FLASH
 
@@ -34,14 +35,14 @@ SECTIONS
   } > FLASH
 
   /* Initialized data in RAM, with load image in FLASH */
-  .data : 
+  .data : AT(ADDR(.text) + SIZEOF(.text))
   {
     . = ALIGN(4);
     _sdata = .;
     *(.data*)
     . = ALIGN(4);
     _edata = .;
-  } > RAM AT > FLASH
+  } > RAM
 
   _sidata = LOADADDR(.data);
 

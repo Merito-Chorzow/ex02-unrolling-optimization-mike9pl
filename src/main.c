@@ -1,5 +1,7 @@
 #include <stdint.h>
-#include <stdio.h>
+extern void semihost_putstring(const char *);
+extern void semihost_putnumber(unsigned);
+//#include <stdio.h>
 
 static unsigned sum8_c(const uint8_t* p, unsigned n) {
   unsigned acc=0;
@@ -30,14 +32,19 @@ int main(void) {
 
   unsigned a = sum8_c(buf, N);
   unsigned b = sum8_unroll4(buf, N);
-
-  printf("ex02: sum8_c=%u sum8_unroll4=%u\n", a, b);
-  if (a==b) puts("OK [ex02]"); else puts("FAIL [ex02]");
+  //printf("ex02: sum8_c=%u sum8_unroll4=%u\n", a, b);
+  semihost_putstring("ex02: sum8_c=");
+  semihost_putnumber(a);
+  semihost_putstring(" sum8_unroll4=");
+  semihost_putnumber(b);
+  semihost_putstring("\n");
+  if (a==b) semihost_putstring("OK [ex02]"); else semihost_putstring("FAIL [ex02]");
 
   /* Prosty „pomiar” — wielokrotne wywołania (metryka czasopodobna) */
   volatile unsigned sink=0;
   for (unsigned k=0;k<100;k++) sink += sum8_unroll4(buf, N);
-  printf("ex02: metric=%u\n", sink & 0xFFFF);
+  semihost_putstring("ex02: metric=");
+  semihost_putnumber(sink & 0xFFFF);
 
   return 0;
 }
